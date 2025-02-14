@@ -2,15 +2,15 @@ version: "3"
 services:
   ansible:
     build:
-      context: . # Root context
+      context: .
       dockerfile: dockerfiles/ansible.dockerfile
     container_name: ansible_container
     networks:
       - ansible_network
     volumes:
-      - ./.ssh:/root/.ssh # Use existing SSH keys
-      - ./ansible_playbooks:/ansible_playbooks # Playbooks
-      - ./executables:/executables # Mount executables folder
+      - ./.ssh:/root/.ssh
+      - ./ansible_playbooks:/ansible_playbooks
+      - ./executables:/executables
     working_dir: /ansible_playbooks
     depends_on:
       - ubuntu1
@@ -21,31 +21,37 @@ services:
 
   ubuntu1:
     build:
-      context: . # Root context
+      context: .
       dockerfile: dockerfiles/ubuntu.dockerfile
     container_name: ubuntu1
     networks:
       - ansible_network
+    ports:
+      - "8081:80" # Expose NGINX port
     tty: true
     stdin_open: true
 
   ubuntu2:
     build:
-      context: . # Root context
+      context: .
       dockerfile: dockerfiles/ubuntu.dockerfile
     container_name: ubuntu2
     networks:
       - ansible_network
+    ports:
+      - "8082:80" # Expose NGINX port
     tty: true
     stdin_open: true
 
   ubuntu3:
     build:
-      context: . # Root context
+      context: .
       dockerfile: dockerfiles/ubuntu.dockerfile
     container_name: ubuntu3
     networks:
       - ansible_network
+    ports:
+      - "8083:80" # Expose NGINX port
     tty: true
     stdin_open: true
 

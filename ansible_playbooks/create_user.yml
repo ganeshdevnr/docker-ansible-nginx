@@ -1,9 +1,12 @@
-- name: Create a new user on all Ubuntu servers
+- name: Configure Ubuntu Servers
   hosts: ubuntu_servers
   become: yes
   tasks:
-    - name: Ensure demouser exists
-      user:
-        name: demouser
-        state: present
-        create_home: yes
+    - name: Copy NGINX install script to servers
+      copy:
+        src: /executables/install-nginx.sh
+        dest: /tmp/install-nginx.sh
+        mode: "0755"
+
+    - name: Execute the install-nginx.sh script
+      command: sh /tmp/install-nginx.sh
