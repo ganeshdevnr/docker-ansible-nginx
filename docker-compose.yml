@@ -27,7 +27,10 @@ services:
     networks:
       - ansible_network
     ports:
-      - "8081:80" # Expose NGINX port
+      - "8081:80"
+    volumes:
+      - ./nginx-config/default.conf:/etc/nginx/sites-enabled/default:ro
+      - ./src:/var/www/html
     tty: true
     stdin_open: true
 
@@ -39,7 +42,10 @@ services:
     networks:
       - ansible_network
     ports:
-      - "8082:80" # Expose NGINX port
+      - "8082:80"
+    volumes:
+      - ./nginx-config/default.conf:/etc/nginx/sites-enabled/default:ro
+      - ./src:/var/www/html
     tty: true
     stdin_open: true
 
@@ -51,9 +57,26 @@ services:
     networks:
       - ansible_network
     ports:
-      - "8083:80" # Expose NGINX port
+      - "8083:80"
+    volumes:
+      - ./nginx-config/default.conf:/etc/nginx/sites-enabled/default:ro
+      - ./src:/var/www/html
     tty: true
     stdin_open: true
+
+  nginx-lb:
+    image: nginx:latest
+    container_name: nginx_lb
+    networks:
+      - ansible_network
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx-config/nginx-lb.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - ubuntu1
+      - ubuntu2
+      - ubuntu3
 
 networks:
   ansible_network:
