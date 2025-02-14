@@ -1,8 +1,8 @@
-- name: Configure Ubuntu Servers
+- name: Install and Configure NGINX
   hosts: ubuntu_servers
   become: yes
   tasks:
-    - name: Copy NGINX install script to servers
+    - name: Copy NGINX install script to the servers
       copy:
         src: /executables/install-nginx.sh
         dest: /tmp/install-nginx.sh
@@ -10,3 +10,6 @@
 
     - name: Execute the install-nginx.sh script
       command: sh /tmp/install-nginx.sh
+
+    - name: Start NGINX using service command
+      command: sudo service nginx start
